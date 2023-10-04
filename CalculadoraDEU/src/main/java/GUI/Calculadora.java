@@ -4,24 +4,24 @@
  */
 package GUI;
 
-import javax.swing.JTextField;
+import java.util.*;
 
 /**
  *
  * @author Bravo
  */
 public class Calculadora extends javax.swing.JFrame {
-
-    int num1, num2;
-    double numDouble2;
-    String signo;
     private double numeroEnMemoria = 0;
+    private List<Double> numeros = new ArrayList<>();
+    private List<String> operadores = new ArrayList<>();
+    private String ultimoOperador = "";
 
     /**
      * Creates new form Caalculadora
      */
     public Calculadora() {
         initComponents();
+
     }
 
     /**
@@ -357,14 +357,14 @@ public class Calculadora extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addComponent(btnMultiplicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnCero, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)
+                                .addComponent(btnCero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnDecimal, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnSumar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnMOD, javax.swing.GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+                            .addComponent(btnMOD, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnIgual, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -452,9 +452,10 @@ public class Calculadora extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -465,8 +466,14 @@ public class Calculadora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSumarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumarActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "+";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("+");
+            ultimoOperador = "+";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
     }//GEN-LAST:event_btnSumarActionPerformed
 
@@ -475,42 +482,54 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnOchoActionPerformed
 
     private void btnIgualActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgualActionPerformed
-        numDouble2 = Double.parseDouble(txtCalcular.getText());
-        num2 = Integer.parseInt(txtCalcular.getText());
-        switch (signo) {
-            case "+":
-                txtCalcular.setText(Double.toString(num1 + num2));
-                break;
-            case "-":
-                txtCalcular.setText(Double.toString(num1 - num2));
-                break;
-            case "*":
-                txtCalcular.setText(Double.toString(num1 * num2));
-                break;
-            case "/":
-                if (num2 != 0) {
-                    txtCalcular.setText(Double.toString(num1 / numDouble2));
-                } else {
-                    txtCalcular.setText("Error");
-                }
-                break;
-            case "%":
-                double resultado = (num1 * numDouble2) / 100.0;
-                txtCalcular.setText(Double.toString(resultado));
-                break;
-            case "MOD":
-                if (num2 != 0) {
-                    double resultadoMOD = num1 % numDouble2;
-                    txtCalcular.setText(Double.toString(resultadoMOD));
-                } else {
-                    // Manejar la división por cero
-                    txtCalcular.setText("Error");
-                }
-                break;
-            default:
-                txtCalcular.setText("Operación no válida");
-                break;
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
         }
+        double resultado = numeros.get(0);
+        for (int i = 0; i < operadores.size(); i++) {
+            String operador = operadores.get(i);
+            double siguienteNumero = numeros.get(i + 1);
+            switch (operador) {
+                case "+":
+                    resultado += siguienteNumero;
+                    break;
+                case "-":
+                    resultado -= siguienteNumero;
+                    break;
+                case "*":
+                    resultado *= siguienteNumero;
+                    break;
+                case "/":
+                    if (siguienteNumero != 0) {
+                        resultado /= siguienteNumero;
+                    } else {
+                        txtCalcular.setText("Error");
+                        return;
+                    }
+                    break;
+                case "%":
+                    resultado %= siguienteNumero;
+                    break;
+                case "MOD":
+                    if (siguienteNumero != 0) {
+                        resultado = resultado % siguienteNumero;
+                    } else {
+                        // Manejar la división por cero
+                        txtCalcular.setText("Error");
+                    }
+                    break;
+                default:
+                    txtCalcular.setText("Operación no válida");
+                    break;
+            }
+        }
+        txtCalcular.setText(Double.toString(resultado));
+        numeros.clear();
+        operadores.clear();
+        ultimoOperador = "";
+
     }//GEN-LAST:event_btnIgualActionPerformed
 
     private void btnCuatroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCuatroActionPerformed
@@ -546,9 +565,16 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCeroActionPerformed
 
     private void btnRestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRestarActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "-";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("-");
+            ultimoOperador = "-";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
+
     }//GEN-LAST:event_btnRestarActionPerformed
 
     private void txtCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCalcularActionPerformed
@@ -560,15 +586,29 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCActionPerformed
 
     private void btnMultiplicacionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiplicacionActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "*";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("*");
+            ultimoOperador = "*";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
+
     }//GEN-LAST:event_btnMultiplicacionActionPerformed
 
     private void btnDivicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivicionActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "/";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("/");
+            ultimoOperador = "/";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
+
     }//GEN-LAST:event_btnDivicionActionPerformed
 
     private void btnSieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSieteActionPerformed
@@ -576,14 +616,26 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSieteActionPerformed
 
     private void btnPorcentajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPorcentajeActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "%";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("%");
+            ultimoOperador = "%";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
     }//GEN-LAST:event_btnPorcentajeActionPerformed
 
     private void btnMODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMODActionPerformed
-        num1 = Integer.parseInt(txtCalcular.getText());
-        signo = "MOD";
+        String textoActual = txtCalcular.getText();
+        if (!textoActual.isEmpty()) {
+            double numero = Double.parseDouble(textoActual);
+            numeros.add(numero);
+            operadores.add("MOD");
+            ultimoOperador = "MOD";
+            txtCalcular.setText("");
+        }
         txtCalcular.setText("");
     }//GEN-LAST:event_btnMODActionPerformed
 
@@ -631,9 +683,9 @@ public class Calculadora extends javax.swing.JFrame {
     private void btnNegativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNegativoActionPerformed
         String textoActual = txtCalcular.getText();
         if (!textoActual.isEmpty()) {
-            int numeroActual = Integer.parseInt(textoActual);
-            int numeroNegativo = -numeroActual;
-            txtCalcular.setText(Integer.toString(numeroNegativo));
+            double numeroActual = Integer.parseInt(textoActual);
+            double numeroNegativo = -numeroActual;
+            txtCalcular.setText(Double.toString(numeroNegativo));
         }
     }//GEN-LAST:event_btnNegativoActionPerformed
 
