@@ -21,7 +21,6 @@ public class Calculadora extends javax.swing.JFrame {
      */
     public Calculadora() {
         initComponents();
-
     }
 
     /**
@@ -468,13 +467,13 @@ public class Calculadora extends javax.swing.JFrame {
     private void btnSumarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSumarActionPerformed
         String textoActual = txtCalcular.getText();
         if (!textoActual.isEmpty()) {
+             // convierte el texto en un número y lo agrega a la lista de números
             double numero = Double.parseDouble(textoActual);
             numeros.add(numero);
             operadores.add("+");
             ultimoOperador = "+";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
     }//GEN-LAST:event_btnSumarActionPerformed
 
     private void btnOchoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOchoActionPerformed
@@ -488,6 +487,7 @@ public class Calculadora extends javax.swing.JFrame {
             numeros.add(numero);
         }
         double resultado = numeros.get(0);
+        // Iterar a traves de la lista de operadores y números para realizar cálculos
         for (int i = 0; i < operadores.size(); i++) {
             String operador = operadores.get(i);
             double siguienteNumero = numeros.get(i + 1);
@@ -525,7 +525,9 @@ public class Calculadora extends javax.swing.JFrame {
                     break;
             }
         }
+        // Mostrar el resultado
         txtCalcular.setText(Double.toString(resultado));
+         // Limpiar las listas de números y operadores para futuras operaciones
         numeros.clear();
         operadores.clear();
         ultimoOperador = "";
@@ -573,8 +575,6 @@ public class Calculadora extends javax.swing.JFrame {
             ultimoOperador = "-";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
-
     }//GEN-LAST:event_btnRestarActionPerformed
 
     private void txtCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCalcularActionPerformed
@@ -594,8 +594,6 @@ public class Calculadora extends javax.swing.JFrame {
             ultimoOperador = "*";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
-
     }//GEN-LAST:event_btnMultiplicacionActionPerformed
 
     private void btnDivicionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivicionActionPerformed
@@ -607,8 +605,6 @@ public class Calculadora extends javax.swing.JFrame {
             ultimoOperador = "/";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
-
     }//GEN-LAST:event_btnDivicionActionPerformed
 
     private void btnSieteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSieteActionPerformed
@@ -624,7 +620,6 @@ public class Calculadora extends javax.swing.JFrame {
             ultimoOperador = "%";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
     }//GEN-LAST:event_btnPorcentajeActionPerformed
 
     private void btnMODActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMODActionPerformed
@@ -636,7 +631,6 @@ public class Calculadora extends javax.swing.JFrame {
             ultimoOperador = "MOD";
             txtCalcular.setText("");
         }
-        txtCalcular.setText("");
     }//GEN-LAST:event_btnMODActionPerformed
 
     private void btnCEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCEActionPerformed
@@ -649,6 +643,7 @@ public class Calculadora extends javax.swing.JFrame {
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         String textoActual = txtCalcular.getText();
         if (!textoActual.isEmpty()) {
+            // obtiene la última posición del texto
             int ultimaPosicion = textoActual.length() - 1;
             if (ultimaPosicion >= 0) {
                 String nuevoTexto = textoActual.substring(0, ultimaPosicion);
@@ -684,7 +679,7 @@ public class Calculadora extends javax.swing.JFrame {
         String textoActual = txtCalcular.getText();
         if (!textoActual.isEmpty()) {
             double numeroActual = Integer.parseInt(textoActual);
-            double numeroNegativo = -numeroActual;
+            double numeroNegativo = -numeroActual; //transforma el numero actual en negativo
             txtCalcular.setText(Double.toString(numeroNegativo));
         }
     }//GEN-LAST:event_btnNegativoActionPerformed
