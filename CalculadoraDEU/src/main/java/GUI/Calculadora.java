@@ -661,7 +661,7 @@ public class Calculadora extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMRActionPerformed
 
     private void btnMSActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMSActionPerformed
-        int numero = Integer.parseInt(txtCalcular.getText());
+        double numero = Double.parseDouble(txtCalcular.getText());
         numeroEnMemoria = numero;
     }//GEN-LAST:event_btnMSActionPerformed
 
@@ -678,7 +678,7 @@ public class Calculadora extends javax.swing.JFrame {
     private void btnNegativoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNegativoActionPerformed
         String textoActual = txtCalcular.getText();
         if (!textoActual.isEmpty()) {
-            double numeroActual = Integer.parseInt(textoActual);
+            double numeroActual = Double.parseDouble(textoActual);
             double numeroNegativo = -numeroActual; //transforma el numero actual en negativo
             txtCalcular.setText(Double.toString(numeroNegativo));
         }
